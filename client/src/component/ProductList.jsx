@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import toast from "react-hot-toast";
 
 const ProductList = ({ products }) => {
     const [category, setCategory] = useState('');
     const [productList, setProductList] = useState(products);
+
 
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
@@ -18,6 +19,13 @@ const ProductList = ({ products }) => {
     const filteredProducts = category
         ? productList.filter((product) => product.category === category)
         : productList;
+
+
+    useEffect(() => {
+        if (products && Array.isArray(products)) {
+            setProductList(products);
+        }
+    }, [products]);
 
     return (
         <div className="container mx-auto px-4 py-6">
