@@ -25,7 +25,7 @@ const HomeComponent = () => {
             setErrors('Image is required');
         } else {
             setErrors('');
-            setProducts([...products, { title, category, image:imagePreview , code:generateCode}]);
+            setProducts([...products, { title, category, image:imagePreview , id:generateCode}]);
             setTitle('');
             setCategory('');
             setImage('');

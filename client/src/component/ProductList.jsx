@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
+import toast from "react-hot-toast";
 
 const ProductList = ({ products }) => {
     const [category, setCategory] = useState('');
+    const [productList, setProductList] = useState(products);
 
     const handleCategoryChange = (e) => {
         setCategory(e.target.value);
     };
 
+    const deleteProduct = (id) => {
+        const updatedList = productList.filter((product) => product.id !== id);
+        setProductList(updatedList);
+        toast.success('Product deleted successfully');
+    };
+
     const filteredProducts = category
-        ? products.filter((product) => product.category === category)
-        : products;
+        ? productList.filter((product) => product.category === category)
+        : productList;
 
     return (
         <div className="container mx-auto px-4 py-6">
@@ -23,7 +31,7 @@ const ProductList = ({ products }) => {
                     id="category"
                     value={category}
                     onChange={handleCategoryChange}
-                    className="w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="cursor-pointer w-full sm:w-64 px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="">All Categories</option>
                     <option value="tshirt">T-Shirt</option>
@@ -38,18 +46,25 @@ const ProductList = ({ products }) => {
                 <p className="text-gray-500 text-sm">No products found for this category.</p>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredProducts.map((product, index) => (
+                    {filteredProducts.map((product) => (
                         <div
-                            key={index}
-                            className=" relative bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow p-4 h-full"
+                            key={product.id}
+                            className="relative bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition-shadow p-4 h-full"
                         >
                             <img
                                 src={product.image}
                                 alt={product.title}
                                 className="w-full cursor-pointer h-48 object-contain rounded-md mb-4"
                             />
-                            <h3 className="text-sm  cursor-pointer text-gray-900 mb-1">{product.title}</h3>
-                            <p className="text-sm px-3 bg-red-500 rounded text-white capitalize absolute top-2 right-3">{product.category}</p>
+                            <h3 className="text-sm cursor-pointer text-gray-900 mb-1">{product.title}</h3>
+                            <p className="text-sm px-3 bg-blue-500 rounded text-white capitalize absolute top-2 right-3">{product.category}</p>
+                            <div className="absolute bottom-2 right-3">
+                                <button
+                                    onClick={() => deleteProduct(product.id)}
+                                    className='cursor-pointer px-2 rounded text-white bg-red-500'>
+                                    Delete Product
+                                </button>
+                            </div>
                         </div>
                     ))}
                 </div>
